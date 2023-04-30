@@ -1,6 +1,3 @@
-
-
-#import h5py
 import tensorflow_datasets as tfds
 import tensorflow as tf
 import itertools
@@ -17,18 +14,12 @@ train_set_raw = tfds.load(
  split='train',
  as_supervised=True)
 
-print(type(train_set_raw))
 
-'''test_set_raw = dict(itertools.islice(train.items(), int(len(train)*0.1)))
 
-valid_set_raw= dict(itertools.islice(train.items(), int(len(train)*0.25)))
-train_set_raw= {x:train[x] for x in train if x not in valid_set_raw}
-valid_set_raw = {x:valid_set_raw[x] for x in valid_set_raw if x not in test_set_raw}
-
-valid_set_raw= np.array(list(valid_set_raw.items()))
-train_set_raw= np.array(list(train_set_raw.items()))
-test_set_raw= np.array(list(test_set_raw.items()))'''
-
+test_set_raw=train_set_raw.take(int(len(train_set_raw)*0.1))
+train_set_raw=train_set_raw.skip(int(len(train_set_raw)*0.1))
+valid_set_raw=train_set_raw.take(int(len(train_set_raw)*0.25))
+train_set_raw=train_set_raw.skip(int(len(train_set_raw)*0.25))
 
 batch_size = 32
 preprocess = tf.keras.Sequential([
